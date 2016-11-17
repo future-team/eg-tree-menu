@@ -36,11 +36,13 @@ export default class extends Component{
             }else{
                 expandNodes[nodeId]=true;
             }
+            clickCallback&&clickCallback(nodeId,type,expandNodes);
             this.setState({
                 expandNodes
             })
+        }else{
+            clickCallback&&clickCallback(nodeId,type);
         }
-        clickCallback&&clickCallback(nodeId,type,expandNodes);
     }
     renderNode(data){
         let self=this,
