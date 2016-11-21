@@ -29,8 +29,12 @@
   padding-left: 15px;
 }
 .branch{
+  span:first-child{
+    cursor: pointer;
+  }
   .pre-i{
     content: '';
+    cursor: pointer;
     position: relative;
     top: -4px;
     margin-right: 5px;
@@ -55,4 +59,15 @@
 }
 .tree-node{
   margin-bottom: 8px;
+  .content{
+    cursor: default;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    color:#333;
+    padding-left: 5px;
+    &.selected{
+      color: @theme-color;
+    }
+  }
 }

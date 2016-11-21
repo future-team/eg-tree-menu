@@ -16,6 +16,9 @@ export default class extends Component{
             expandNodes
         };
     }
+    getExpandNodes(){
+        return this.state.expandNodes;
+    }
     componentWillReceiveProps(nextProps) {
 
         let expandNodes=nextProps.expandNodes||{};
@@ -28,21 +31,19 @@ export default class extends Component{
         return this.renderNode(data);
     }
     nodeClickCallback(nodeId,type){
-        let {expandNodes}=this.state,
-            {clickCallback}=this.props;
-        if(type=='branch'){
-            if(expandNodes[nodeId]){
-                delete expandNodes[nodeId]
-            }else{
-                expandNodes[nodeId]=true;
-            }
-            clickCallback&&clickCallback(nodeId,type,expandNodes);
-            this.setState({
-                expandNodes
-            })
+        let {clickCallback}=this.props;
+        clickCallback&&clickCallback(nodeId,type);
+    }
+    toggleCallback(nodeId){
+        let {expandNodes}=this.state;
+        if(expandNodes[nodeId]){
+            delete expandNodes[nodeId]
         }else{
-            clickCallback&&clickCallback(nodeId,type);
+            expandNodes[nodeId]=true;
         }
+        this.setState({
+            expandNodes
+        })
     }
     renderNode(data){
         let self=this,
@@ -55,11 +56,13 @@ export default class extends Component{
                 children=self.renderNode(item.children);
             }
             return (<div key={'level-'+itemKey}>
-                <Node clickCallback={::self.nodeClickCallback}
+                <Node toggleCallback={::self.toggleCallback}
+                      clickCallback={::self.nodeClickCallback}
                       type={children?'branch':'leaf'}
                       nodeId={itemKey}
                       expand={expandNodes[itemKey]}
-                      nodeContent={item[contentKey]}>
+                      nodeContent={item[contentKey]}
+                      selected={self.props.selected==itemKey}>
                 </Node>
                 {expandNodes[itemKey]?(<div className={'node-container'} key={'container-'+itemKey}>
                     {children}

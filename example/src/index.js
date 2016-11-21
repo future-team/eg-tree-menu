@@ -7,7 +7,8 @@ class App extends Component{
     constructor(props,context){
         super(props,context);
         this.state={
-            expandNodes:{3: true, 4: true, 5: true, 6: true, 7: true, 8: true, 9: true, 10: true, 11: true, 16: true},
+            selected:'',
+            expandNodes:{3: true, 4: true, 5: true, 6: true, 7: true, 8: true, 9: true, 10: true, 11: true, 16: true,10014:true},
             data:[
             {
                 "typeId": 2,
@@ -2779,62 +2780,6 @@ class App extends Component{
                         "secondOwnerId": 0,
                         "children": [
                             {
-                                "typeId": 10014,
-                                "parentTypeId": 3,
-                                "typeName": "评价评分",
-                                "leadingAnswer": "",
-                                "level": 2,
-                                "firstOwnerId": 0,
-                                "secondOwnerId": 0,
-                                "children": [
-                                    {
-                                        "typeId": 1000034,
-                                        "parentTypeId": 10014,
-                                        "typeName": "美团侧评价",
-                                        "leadingAnswer": "",
-                                        "level": 3,
-                                        "firstOwnerId": 37743,
-                                        "secondOwnerId": 0,
-                                        "children": [],
-                                        "leaf": true
-                                    },
-                                    {
-                                        "typeId": 1000035,
-                                        "parentTypeId": 10014,
-                                        "typeName": "点评侧评价",
-                                        "leadingAnswer": "点评评价的恶意差评、炒作的举报和申诉请到<a style=\"cursor: pointer; color: #2c87bd\" class=\"external-link\" href=\"http://trust.dianping.com\" target=\"_blank\">http://trust.dianping.com</a>提交反馈",
-                                        "level": 3,
-                                        "firstOwnerId": 20779,
-                                        "secondOwnerId": 0,
-                                        "children": [],
-                                        "leaf": true
-                                    },
-                                    {
-                                        "typeId": 1000036,
-                                        "parentTypeId": 10014,
-                                        "typeName": "美团侧星级评分",
-                                        "leadingAnswer": "",
-                                        "level": 3,
-                                        "firstOwnerId": 25305,
-                                        "secondOwnerId": 0,
-                                        "children": [],
-                                        "leaf": true
-                                    },
-                                    {
-                                        "typeId": 1000037,
-                                        "parentTypeId": 10014,
-                                        "typeName": "点评侧评分",
-                                        "leadingAnswer": "",
-                                        "level": 3,
-                                        "firstOwnerId": 34348,
-                                        "secondOwnerId": 0,
-                                        "children": [],
-                                        "leaf": true
-                                    }
-                                ],
-                                "leaf": false
-                            },
-                            {
                                 "typeId": 1000026,
                                 "parentTypeId": 10006,
                                 "typeName": "门店基本信息/地图报错",
@@ -5426,10 +5371,15 @@ class App extends Component{
         },5000);
     }
     render(){
+        let self=this;
         return(<div>
-            <TreeMenu clickCallback={function(nodeId,type,expandNodes){
-                console.log(nodeId,type,expandNodes);
-            }} data={this.state.data} expandNodes={this.state.expandNodes}/>
+            <button onClick={function(){console.log(self.refs.tm.getExpandNodes())}}>check me</button>
+            <TreeMenu ref='tm' clickCallback={function(nodeId,type){
+                console.log(nodeId,type);
+                self.setState({
+                selected:nodeId
+                })
+            }} selected={self.state.selected} data={this.state.data} expandNodes={this.state.expandNodes}/>
         </div>)
     }
 }
