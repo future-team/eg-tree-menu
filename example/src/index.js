@@ -2727,7 +2727,7 @@ class App extends Component{
                             {
                                 "typeId": 1000023,
                                 "parentTypeId": 10005,
-                                "typeName": "线上测试",
+                                "typeName": "线上测试1",
                                 "leadingAnswer": "这是线上测试分类,你玩我吧!",
                                 "level": 3,
                                 "firstOwnerId": 22315,

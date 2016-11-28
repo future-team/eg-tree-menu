@@ -3,7 +3,7 @@ import React, { Component ,PropTypes} from 'react';
 export default class Node extends Component{
 
     shouldComponentUpdate(nextProps) {
-        return !(this.props.content==nextProps.content&&
+        return !(this.props.nodeContent==nextProps.nodeContent&&
         this.props.type==nextProps.type&&
         this.props.expand==nextProps.expand&&
         this.props.selected==nextProps.selected)
