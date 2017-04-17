@@ -8,7 +8,7 @@ class App extends Component{
         super(props,context);
         this.state={
             selected:'',
-            expandNodes:{3: true, 4: true, 5: true, 6: true, 7: true, 8: true, 9: true, 10: true, 11: true, 16: true,10014:true},
+            expandNodes:{ 111000034:true},
             data:[
             {
                 "typeId": 2,
@@ -91,7 +91,19 @@ class App extends Component{
                                 "level": 3,
                                 "firstOwnerId": 37743,
                                 "secondOwnerId": 0,
-                                "children": [],
+                                "children": [
+                                    {
+                                        "typeId": 111000034,
+                                        "parentTypeId": 10014,
+                                        "typeName": "美团侧评价disanji",
+                                        "leadingAnswer": "",
+                                        "level": 3,
+                                        "firstOwnerId": 37743,
+                                        "secondOwnerId": 0,
+                                        "children": [],
+                                        "leaf": true
+                                    }
+                                ],
                                 "leaf": true
                             },
                             {
