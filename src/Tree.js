@@ -11,24 +11,45 @@ export default class extends Component{
 
     constructor(props,context){
         super(props,context);
-        let expandNodes=props.expandNodes||{};
+        let expandNodes=props.expandNodes||{},
+            data=props.data||[];
         this.state={
             expandNodes
         };
+        this.pathMap={};
+        this.climbTree(data,null,this.pathMap);
     }
     getExpandNodes(){
         return this.state.expandNodes;
     }
     componentWillReceiveProps(nextProps) {
 
-        let expandNodes=nextProps.expandNodes||{};
+        let expandNodes=nextProps.expandNodes||{},
+            data=nextProps.data||[],
+            {pathMap}=this;
+        this.climbTree(data,null,pathMap);
         this.state={
             expandNodes
         };
     }
+    climbTree(nodes,parent,pathMap){
+        let _this=this,
+            {idKey}=this.props;
+        nodes.forEach((node)=>{
+            let nodeId=node[idKey],
+                children=node.children;
+            if(parent){
+                pathMap[nodeId]=parent[idKey];
+            }
+            if(children&&children.length){
+                _this.climbTree(children,node,pathMap)
+            }
+        })
+    }
     renderTree(){
-        let data=this.props.data;
-        return this.renderNode(data);
+        let data=this.props.data,
+            expandNodes=this.recalculateExpands(this.state.expandNodes||{});
+        return this.renderNode(data,expandNodes);
     }
     nodeClickCallback(nodeId,type){
         let {clickCallback}=this.props;
@@ -45,15 +66,26 @@ export default class extends Component{
             expandNodes
         })
     }
-    renderNode(data){
+    recalculateExpands(expandNodes){
+        let result={},
+            {pathMap}=this;
+        for(let key in expandNodes){
+            let curKey=key;
+            do{
+                result[curKey]=true;
+                curKey=pathMap[curKey];
+            }while(curKey!=undefined)
+        }
+        return result;
+    }
+    renderNode(data,expandNodes){
         let self=this,
-            {idKey,contentKey}=self.props,
-            {expandNodes}=self.state;
+            {idKey,contentKey}=self.props;
         return data.map(function(item,index){
             let children=null,
                 itemKey=item[idKey];
             if(item.children&&item.children.length){
-                children=self.renderNode(item.children);
+                children=self.renderNode(item.children,expandNodes);
             }
             return (<div key={'level-'+itemKey}>
                 <Node toggleCallback={::self.toggleCallback}

@@ -120,10 +120,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _classCallCheck(this, _default);
 	
 	        _Component.call(this, props, context);
-	        var expandNodes = props.expandNodes || {};
+	        var expandNodes = props.expandNodes || {},
+	            data = props.data || [];
 	        this.state = {
 	            expandNodes: expandNodes
 	        };
+	        this.pathMap = {};
+	        this.climbTree(data, null, this.pathMap);
 	    }
 	
 	    _default.prototype.getExpandNodes = function getExpandNodes() {
@@ -131,16 +134,36 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	
 	    _default.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
-	
 	        var expandNodes = nextProps.expandNodes || {};
+	        var data = nextProps.data || [];
+	        var pathMap = this.pathMap;
+	
+	        this.climbTree(data, null, pathMap);
 	        this.state = {
 	            expandNodes: expandNodes
 	        };
 	    };
 	
+	    _default.prototype.climbTree = function climbTree(nodes, parent, pathMap) {
+	        var _this = this;
+	        var idKey = this.props.idKey;
+	
+	        nodes.forEach(function (node) {
+	            var nodeId = node[idKey],
+	                children = node.children;
+	            if (parent) {
+	                pathMap[nodeId] = parent[idKey];
+	            }
+	            if (children && children.length) {
+	                _this.climbTree(children, node, pathMap);
+	            }
+	        });
+	    };
+	
 	    _default.prototype.renderTree = function renderTree() {
-	        var data = this.props.data;
-	        return this.renderNode(data);
+	        var data = this.props.data,
+	            expandNodes = this.recalculateExpands(this.state.expandNodes || {});
+	        return this.renderNode(data, expandNodes);
 	    };
 	
 	    _default.prototype.nodeClickCallback = function nodeClickCallback(nodeId, type) {
@@ -162,18 +185,31 @@ return /******/ (function(modules) { // webpackBootstrap
 	        });
 	    };
 	
-	    _default.prototype.renderNode = function renderNode(data) {
+	    _default.prototype.recalculateExpands = function recalculateExpands(expandNodes) {
+	        var result = {};
+	        var pathMap = this.pathMap;
+	
+	        for (var key in expandNodes) {
+	            var curKey = key;
+	            do {
+	                result[curKey] = true;
+	                curKey = pathMap[curKey];
+	            } while (curKey);
+	        }
+	        return result;
+	    };
+	
+	    _default.prototype.renderNode = function renderNode(data, expandNodes) {
 	        var self = this;
 	        var _self$props = self.props;
 	        var idKey = _self$props.idKey;
 	        var contentKey = _self$props.contentKey;
-	        var expandNodes = self.state.expandNodes;
 	
 	        return data.map(function (item, index) {
 	            var children = null,
 	                itemKey = item[idKey];
 	            if (item.children && item.children.length) {
-	                children = self.renderNode(item.children);
+	                children = self.renderNode(item.children, expandNodes);
 	            }
 	            return _react2['default'].createElement(
 	                'div',
