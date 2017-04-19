@@ -51,9 +51,9 @@ export default class extends Component{
             expandNodes=this.recalculateExpands(this.state.expandNodes||{});
         return this.renderNode(data,expandNodes);
     }
-    nodeClickCallback(nodeId,type){
+    nodeClickCallback(nodeId,type,node){
         let {clickCallback}=this.props;
-        clickCallback&&clickCallback(nodeId,type);
+        clickCallback&&clickCallback(nodeId,type,node);
     }
     toggleCallback(nodeId){
         let {expandNodes}=this.state;
@@ -92,6 +92,7 @@ export default class extends Component{
                       clickCallback={::self.nodeClickCallback}
                       type={children?'branch':'leaf'}
                       nodeId={itemKey}
+                      node={item}
                       expand={expandNodes[itemKey]}
                       nodeContent={item[contentKey]}
                       selected={self.props.selected==itemKey}>

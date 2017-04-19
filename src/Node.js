@@ -9,7 +9,7 @@ export default class Node extends Component{
         this.props.selected==nextProps.selected)
     }
     clickCallback(){
-        this.props.clickCallback&&this.props.clickCallback(this.props.nodeId,this.props.type)
+        this.props.clickCallback&&this.props.clickCallback(this.props.nodeId,this.props.type,this.props.node)
     }
     toggleCallback(){
         if(this.props.type=='branch'){

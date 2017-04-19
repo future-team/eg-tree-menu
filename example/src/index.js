@@ -5386,8 +5386,8 @@ class App extends Component{
         let self=this;
         return(<div>
             <button onClick={function(){console.log(self.refs.tm.getExpandNodes())}}>check me</button>
-            <TreeMenu ref='tm' clickCallback={function(nodeId,type){
-                console.log(nodeId,type);
+            <TreeMenu ref='tm' clickCallback={function(nodeId,type,node){
+                console.log(nodeId,type,node);
                 self.setState({
                 selected:nodeId
                 })
