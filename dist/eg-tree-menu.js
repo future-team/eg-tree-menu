@@ -166,10 +166,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return this.renderNode(data, expandNodes);
 	    };
 	
-	    _default.prototype.nodeClickCallback = function nodeClickCallback(nodeId, type) {
+	    _default.prototype.nodeClickCallback = function nodeClickCallback(nodeId, type, node) {
 	        var clickCallback = this.props.clickCallback;
 	
-	        clickCallback && clickCallback(nodeId, type);
+	        clickCallback && clickCallback(nodeId, type, node);
 	    };
 	
 	    _default.prototype.toggleCallback = function toggleCallback(nodeId) {
@@ -194,7 +194,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            do {
 	                result[curKey] = true;
 	                curKey = pathMap[curKey];
-	            } while (curKey);
+	            } while (curKey != undefined);
 	        }
 	        return result;
 	    };
@@ -218,6 +218,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    clickCallback: self.nodeClickCallback.bind(self),
 	                    type: children ? 'branch' : 'leaf',
 	                    nodeId: itemKey,
+	                    node: item,
 	                    expand: expandNodes[itemKey],
 	                    nodeContent: item[contentKey],
 	                    selected: self.props.selected == itemKey }),
@@ -283,7 +284,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 	
 	    Node.prototype.clickCallback = function clickCallback() {
-	        this.props.clickCallback && this.props.clickCallback(this.props.nodeId, this.props.type);
+	        this.props.clickCallback && this.props.clickCallback(this.props.nodeId, this.props.type, this.props.node);
 	    };
 	
 	    Node.prototype.toggleCallback = function toggleCallback() {
