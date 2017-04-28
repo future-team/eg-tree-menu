@@ -55,15 +55,16 @@ export default class extends Component{
         let {clickCallback}=this.props;
         clickCallback&&clickCallback(nodeId,type,node);
     }
-    getIds(obj, arry) {
-        for (let item in obj) {
-            let items = obj[item]
-            arry.push(items.typeId)
-            items.children.length > 0 && this.getIds(items.children, arry)
-        }
+    getIds(list, idArray) {
+        let {idKey}=this.props,
+            _this=this;
+        list.forEach((item)=>{
+            idArray.push(item[idKey])
+            item.children&&item.children.length && _this.getIds(item.children, idArray)
+        })
     }
     getChild(node) {
-        let children = node.children,
+        let children = node.children||[],
             idArray = []
         this.getIds(children,idArray)
         return idArray;
