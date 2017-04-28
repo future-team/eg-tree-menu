@@ -172,11 +172,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	        clickCallback && clickCallback(nodeId, type, node);
 	    };
 	
-	    _default.prototype.toggleCallback = function toggleCallback(nodeId) {
+	    _default.prototype.getIds = function getIds(list, idArray) {
+	        var idKey = this.props.idKey;
+	        var _this = this;
+	        list.forEach(function (item) {
+	            idArray.push(item[idKey]);
+	            item.children && item.children.length && _this.getIds(item.children, idArray);
+	        });
+	    };
+	
+	    _default.prototype.getChild = function getChild(node) {
+	        var children = node.children || [],
+	            idArray = [];
+	        this.getIds(children, idArray);
+	        return idArray;
+	    };
+	
+	    _default.prototype.toggleCallback = function toggleCallback(nodeId, node) {
 	        var expandNodes = this.state.expandNodes;
 	
 	        if (expandNodes[nodeId]) {
+	            var childIds = this.getChild(node);
 	            delete expandNodes[nodeId];
+	            // 同时删除该节点children的nodeId对应元素
+	            for (var item in expandNodes) {
+	                childIds.indexOf(parseInt(item)) >= 0 && delete expandNodes[item];
+	            }
 	        } else {
 	            expandNodes[nodeId] = true;
 	        }
@@ -289,7 +310,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    Node.prototype.toggleCallback = function toggleCallback() {
 	        if (this.props.type == 'branch') {
-	            this.props.toggleCallback(this.props.nodeId);
+	            this.props.toggleCallback(this.props.nodeId, this.props.node);
 	        }
 	    };
 	
