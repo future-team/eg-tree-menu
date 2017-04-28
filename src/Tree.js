@@ -55,10 +55,29 @@ export default class extends Component{
         let {clickCallback}=this.props;
         clickCallback&&clickCallback(nodeId,type,node);
     }
-    toggleCallback(nodeId){
+    getIds(list, idArray) {
+        let {idKey}=this.props,
+            _this=this;
+        list.forEach((item)=>{
+            idArray.push(item[idKey])
+            item.children&&item.children.length && _this.getIds(item.children, idArray)
+        })
+    }
+    getChild(node) {
+        let children = node.children||[],
+            idArray = []
+        this.getIds(children,idArray)
+        return idArray;
+    }
+    toggleCallback(nodeId,node){
         let {expandNodes}=this.state;
         if(expandNodes[nodeId]){
+            let childIds = this.getChild(node);
             delete expandNodes[nodeId]
+            // 同时删除该节点children的nodeId对应元素
+            for(let item in expandNodes){
+                childIds.indexOf(parseInt(item))>=0 && delete expandNodes[item]
+            }
         }else{
             expandNodes[nodeId]=true;
         }

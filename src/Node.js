@@ -13,7 +13,7 @@ export default class Node extends Component{
     }
     toggleCallback(){
         if(this.props.type=='branch'){
-            this.props.toggleCallback(this.props.nodeId)
+            this.props.toggleCallback(this.props.nodeId,this.props.node)
         }
     }
     //nodeId,nodeContent
