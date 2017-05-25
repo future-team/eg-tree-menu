@@ -47,7 +47,7 @@ export default class extends Component{
 
             //当前节点和子节点直接copy treeWeightMap上的原始值
             this.reassign(node.children)
-            console.log(curTreeWeightMap)
+            //console.log(curTreeWeightMap)
         }else{
             //计算出减少值
             let origiWeight=curTreeWeightMap[nodeId],
@@ -61,7 +61,7 @@ export default class extends Component{
 
             //子节点为0
             this.reassign(node.children,0)
-            console.log(curTreeWeightMap)
+            //console.log(curTreeWeightMap)
         }
     }
     calculateTreeWeight(node,treeWeightMap){
@@ -102,6 +102,16 @@ export default class extends Component{
     getExpandNodes(){
         return this.state.expandNodes;
     }
+    getSelectedNodes(){
+        let {treeWeightMap,curTreeWeightMap}=this,
+            idArray=[];
+        for(let key in curTreeWeightMap){
+            if(curTreeWeightMap[key]==1&&treeWeightMap[key]==1){
+                idArray.push(key)
+            }
+        }
+        return idArray;
+    }
     componentWillReceiveProps(nextProps) {
 
         let expandNodes=nextProps.expandNodes||{},
@@ -114,7 +124,7 @@ export default class extends Component{
             _this.treeWeightMap[node[idKey]]=_this.calculateTreeWeight(node,_this.treeWeightMap)
         })
 
-        console.log(this.treeWeightMap)
+        //console.log(this.treeWeightMap)
         this.setState({
             expandNodes
         });
@@ -143,8 +153,8 @@ export default class extends Component{
         this.setState({
             clickNodeId:nodeId
         })
-        //let {clickCallback}=this.props;
-        //clickCallback&&clickCallback(nodeId,type,node);
+        let {clickCallback}=this.props;
+        clickCallback&&clickCallback(nodeId,type,node);
     }
     getIds(list, idArray) {
         let {idKey}=this.props,

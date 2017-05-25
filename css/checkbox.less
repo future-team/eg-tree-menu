@@ -1,0 +1,52 @@
+.transform-func(@param){
+  -webkit-transform: @param;
+  -moz-transform: @param;
+  -ms-transform: @param;
+  -o-transform: @param;
+  transform: @param;
+}
+.border-radius-func(@param){
+  -webkit-border-radius: @param;
+  -moz-border-radius: @param;
+  border-radius: @param;
+}
+
+div.multi-list-checkbox{
+  width: 16px;
+  height: 16px;
+  padding: 2px;
+  box-sizing:border-box;
+  .border-radius-func(2px);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  position:absolute;
+  top: 50%;
+  left: -20px;
+  margin-top: -8px;
+  b.part-select, b.active{
+    box-sizing:border-box;
+    display: block;
+    margin-left: 2px;
+    margin-top:-2px;
+    width:5px;
+    height:9px;
+    border:1px solid;
+  }
+  b.part-select{
+    margin-left: 1px;
+    margin-top:-4px;
+    width:8px;
+    border-color:transparent transparent orangered transparent;
+  }
+  b.active{
+    .transform-func(rotate(45deg));
+    border-color:transparent orangered orangered transparent;
+  }
+}
+.multi-select-tree{
+  .tree-node{
+    margin-left: 20px;
+  }
+  .leaf .pre-i{
+    display:none;
+  }
+}
