@@ -92,9 +92,10 @@ export default class extends Component{
             clickNodeId:-1
         };
         this.pathMap={};
+        this.leafMap={};
         this.treeWeightMap={};
         this.curTreeWeightMap={};
-        this.climbTree(data,null,this.pathMap);
+        this.climbTree(data,null,this.pathMap,this.leafMap);
         data.forEach(node=>{
             _this.treeWeightMap[node[idKey]]=_this.calculateTreeWeight(node,_this.treeWeightMap)
         })
@@ -103,23 +104,24 @@ export default class extends Component{
         return this.state.expandNodes;
     }
     getSelectedNodes(){
-        let {treeWeightMap,curTreeWeightMap}=this,
+        let {leafMap,curTreeWeightMap}=this,
             idArray=[];
         for(let key in curTreeWeightMap){
-            if(curTreeWeightMap[key]==1&&treeWeightMap[key]==1){
+            if(curTreeWeightMap[key]==1&&leafMap[key]){
                 idArray.push(key)
             }
         }
         return idArray;
     }
     componentWillReceiveProps(nextProps) {
-
+        this.leafMap={};
+        this.pathMap={};
         let expandNodes=nextProps.expandNodes||{},
             data=nextProps.data||[],
-            {pathMap}=this,
+            {pathMap,leafMap}=this,
             _this=this,
             {idKey}=this.props;
-        this.climbTree(data,null,pathMap);
+        this.climbTree(data,null,pathMap,leafMap);
         data.forEach(node=>{
             _this.treeWeightMap[node[idKey]]=_this.calculateTreeWeight(node,_this.treeWeightMap)
         })
@@ -129,7 +131,7 @@ export default class extends Component{
             expandNodes
         });
     }
-    climbTree(nodes,parent,pathMap){
+    climbTree(nodes,parent,pathMap,leafMap){
         let _this=this,
             {idKey}=this.props;
         nodes.forEach((node)=>{
@@ -139,7 +141,9 @@ export default class extends Component{
                 pathMap[nodeId]=parent[idKey];
             }
             if(children&&children.length){
-                _this.climbTree(children,node,pathMap)
+                _this.climbTree(children,node,pathMap,leafMap)
+            }else{
+                leafMap[nodeId]=true
             }
         })
     }
